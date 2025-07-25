@@ -1,13 +1,37 @@
-<app-header></app-header>
+<!-- With username and buttons -->
+<app-header>
+  <span class="username">John Doe</span>
+  <app-button text="Logout"></app-button>
+</app-header>
 <div class="app-root">
   <!-- Search component -->
-  <!--<app-search></app-search>-->
+  <!-- <app-search></app-search> -->
 
-  <!-- Info component -->
-  <!--<app-info></app-info>-->
+  <!-- <app-info
+    title="Your List Is Empty"
+    text="Please use 'Add New Course' button to add your first course"
+  >
+    <app-button text="Add New Course"></app-button>
+  </app-info> -->
 
-  <!-- Course Card component -->
-  <!--<app-course-card></app-course-card>-->
+  <!-- Courses List component -->
+  <!-- <app-courses-list
+    [courses]="coursesList"
+    [editable]="true"
+    (showCourse)="onShowCourse($event)"
+    (editCourse)="onEditCourse($event)"
+    (deleteCourse)="onDeleteCourse($event)"
+  >
+  </app-courses-list> -->
+
+  <app-course-info
+    [id]="selectedCourse.id"
+    [title]="selectedCourse.title"
+    [description]="selectedCourse.description"
+    [creationDate]="selectedCourse.creationDate"
+    [duration]="selectedCourse.duration"
+    [authors]="selectedCourse.authors"
+  ></app-course-info>
 
   <!-- Login Form component -->
   <!--<app-login-form></app-login-form>-->

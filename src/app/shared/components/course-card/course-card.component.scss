@@ -17,6 +17,13 @@
 
     &-title {
       font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    &-text {
+      line-height: 1.5;
+      color: #666;
     }
   }
 
@@ -29,6 +36,27 @@
 
     &-text {
       margin-top: 16px;
+
+      div {
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
     }
+
+    &-actions {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+  }
+
+  &__duration,
+  &__date {
+    font-weight: normal;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
   }
 }
