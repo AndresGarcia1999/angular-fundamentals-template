@@ -1,5 +1,8 @@
 <button
   class="app-button"
+  [type]="type"
+  [disabled]="disabled"
+  (click)="onClick()"
   [ngClass]="{ 'app-button__single-icon': iconName && !text }"
 >
   <fa-icon *ngIf="iconName" [icon]="iconName"></fa-icon>

@@ -1,15 +1,16 @@
-@import 'src/app/shared/styles/styles';
+@import "src/app/shared/styles/styles";
 
 .course {
- min-width: 60vw;
+  width: 60vw;
 
-  &__flex {
+  &__flex__duration {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     align-items: baseline;
 
     & input {
       flex: 1;
+      max-width: 320px;
     }
 
     & app-button {
@@ -23,15 +24,40 @@
 
   &__authors {
     margin-top: 8px;
+    margin-bottom: 32px;
     display: flex;
+    gap: 40px;
 
     &-item {
       margin-right: 10px;
     }
   }
+  &__available-authors {
+    width: 60%;
+  }
+
+  &__selected-authors {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   &__icon {
     margin-left: 4px;
     cursor: pointer;
+  }
+}
+
+.author-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  span {
+    font-weight: 500;
   }
 }

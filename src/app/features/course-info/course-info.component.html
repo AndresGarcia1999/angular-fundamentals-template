@@ -9,15 +9,19 @@
     </div>
     <div>
       <b>Duration: </b
-      ><span class="course-info__info-duration">{{ duration }} minutes</span>
+      ><span class="course-info__info-duration">{{ duration | duration }}</span>
     </div>
     <div>
       <b>Created: </b
-      ><span class="course-info__info-date">{{ creationDate }}</span>
+      ><span class="course-info__info-date">{{
+        creationDate | customDate
+      }}</span>
     </div>
     <div>
       <b>Authors: </b
-      ><span class="course-info__info-authors">{{ authors.join(", ") }}</span>
+      ><span class="course-info__info-authors">{{
+        authors | authorNames
+      }}</span>
     </div>
   </div>
 </div>

@@ -7,15 +7,15 @@
     <div class="course-card__info-text">
       <div>
         <b>Authors: </b>
-        {{ authors.join(", ") }}
+        {{ authors | authorNames }}
       </div>
       <div>
         <b>Duration: </b
-        ><span class="course-card__duration">{{ duration }} minutes</span>
+        ><span class="course-card__duration">{{ duration | duration }}</span>
       </div>
       <div>
         <b>Created: </b
-        ><span class="course-card__date">{{ creationDate }}</span>
+        ><span class="course-card__date">{{ creationDate | customDate }}</span>
       </div>
     </div>
     <div class="course-card__info-actions">

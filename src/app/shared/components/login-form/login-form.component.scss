@@ -1,4 +1,11 @@
-@import 'src/app/shared/styles/styles.scss';
+@import "src/app/shared/styles/styles.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 260px;
+}
 
 .login-form {
   width: 260px;

@@ -1,8 +1,14 @@
-@import 'src/app/shared/styles/styles';
+@import "src/app/shared/styles/styles";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 260px;
+}
 
 .registration-form {
   width: 260px;
-  margin-top: 36px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

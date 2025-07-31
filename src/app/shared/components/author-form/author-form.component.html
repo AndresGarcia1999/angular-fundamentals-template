@@ -1,0 +1,36 @@
+<div class="author-form">
+  <form [formGroup]="authorForm">
+    <div class="form__control">
+      <div class="course__flex">
+        <div>
+          <label for="authorName">Author Name</label>
+          <input
+            type="text"
+            id="authorName"
+            placeholder="Input Author Name"
+            formControlName="name"
+            [class.is-invalid]="authorName?.invalid && authorName?.touched"
+          />
+        </div>
+        <app-button
+          text="Create author"
+          type="button"
+          (click)="createAuthor()"
+          [disabled]="authorName?.invalid || !authorName?.value"
+        ></app-button>
+      </div>
+      <div class="error-container">
+        <span
+          *ngIf="authorName?.invalid && authorName?.touched && authorName?.errors?.['minlength']"
+          class="text-danger"
+          >Author name should be at least 2 characters.</span
+        >
+        <span
+          *ngIf="authorName?.invalid && authorName?.touched && authorName?.errors?.['pattern'] && !authorName?.errors?.['minlength']"
+          class="text-danger"
+          >New author should contain only latin letters and numbers.</span
+        >
+      </div>
+    </div>
+  </form>
+</div>

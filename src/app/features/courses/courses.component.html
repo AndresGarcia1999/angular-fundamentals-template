@@ -1,1 +1,14 @@
-<p>courses works!</p>
+<div>
+  <app-search
+    placeholder="Search courses..."
+    (search)="onSearch($event)"
+  ></app-search>
+  <app-courses-list
+    [courses]="filteredCourses"
+    [editable]="true"
+    (showCourse)="onShowCourse($event)"
+    (editCourse)="onEditCourse($event)"
+    (deleteCourse)="onDeleteCourse($event)"
+  >
+  </app-courses-list>
+</div>
