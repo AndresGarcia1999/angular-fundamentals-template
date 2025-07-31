@@ -12,7 +12,7 @@ import {
   CourseCardComponent,
   LoginFormComponent,
   AuthorFormComponent,
-  CourseFormComponent,
+  CourseComponent,
   RegistrationFormComponent,
 } from "./components";
 
@@ -28,7 +28,7 @@ const components = [
   CourseCardComponent,
   LoginFormComponent,
   RegistrationFormComponent,
-  CourseFormComponent,
+  CourseComponent,
   AuthorFormComponent,
   DurationPipe,
   CustomDatePipe,

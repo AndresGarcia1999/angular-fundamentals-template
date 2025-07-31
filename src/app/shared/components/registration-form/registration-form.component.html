@@ -18,11 +18,13 @@
         <div class="error-container">
           <span
             *ngIf="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required']"
+            id="nameErrorMessage"
             class="text-danger"
             >Name is required.</span
           >
           <span
             *ngIf="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['minlength']"
+            id="nameMinLengthErrorMessage"
             class="text-danger"
             >Name must be at least 6 characters long.</span
           >
@@ -36,9 +38,11 @@
           placeholder="Your email"
           formControlName="email"
           required
+          emailValidator
         />
         <div class="error-container">
           <span
+            id="emailErrorMessage"
             *ngIf="email?.invalid && (email?.dirty || email?.touched) && email?.errors?.['required']"
             class="text-danger"
             >Email is required.</span
@@ -61,6 +65,7 @@
         />
         <div class="error-container">
           <span
+            id="passwordErrorMessage"
             *ngIf="password?.invalid && (password?.dirty || password?.touched)"
             class="text-danger"
             >Password is required.</span
