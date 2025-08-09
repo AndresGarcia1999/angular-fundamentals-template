@@ -32,12 +32,6 @@ import { RegistrationFormComponent } from "@shared/components/registration-form/
     ReactiveFormsModule,
   ],
   providers: [
-    // Window injection for SessionStorageService
-    {
-      provide: "Window",
-      useValue: window,
-    },
-
     // HTTP Interceptor for token management
     {
       provide: HTTP_INTERCEPTORS,
