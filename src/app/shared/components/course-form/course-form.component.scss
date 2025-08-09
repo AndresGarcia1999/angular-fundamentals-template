@@ -1,5 +1,14 @@
 @import "src/app/shared/styles/styles";
 
+.loading-container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
 .course {
   width: 60vw;
 
@@ -60,4 +69,11 @@
   span {
     font-weight: 500;
   }
+}
+
+.form__action {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
 }

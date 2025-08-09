@@ -1,14 +1,50 @@
 <div>
-  <app-search
-    placeholder="Search courses..."
-    (search)="onSearch($event)"
-  ></app-search>
-  <app-courses-list
-    [courses]="filteredCourses"
-    [editable]="true"
-    (showCourse)="onShowCourse($event)"
-    (editCourse)="onEditCourse($event)"
-    (deleteCourse)="onDeleteCourse($event)"
-  >
-  </app-courses-list>
+  <div class="header">
+    <app-search
+      placeholder="Search courses..."
+      (search)="onSearch($event)"
+    ></app-search>
+    <app-button
+      *ngIf="isAdmin$ | async"
+      text="Add Course"
+      (click)="onAddNewCourse()"
+    ></app-button>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="loading-container">
+    <app-spinner></app-spinner>
+    <p>Loading courses...</p>
+  </div>
+
+  <ng-container *ngIf="!(isLoading$ | async)">
+    <ng-container
+      *ngIf="(courses$ | async)?.length === 0 && (isAdmin$ | async)"
+    >
+      <app-info
+        *ngIf="!searchTerm"
+        title="Your List Is Empty"
+        text="Please use 'Add New Course' button to add your first course"
+      >
+        <app-button
+          text="Add New Course"
+          (click)="onAddNewCourse()"
+        ></app-button>
+      </app-info>
+
+      <div *ngIf="searchTerm" class="no-courses-message">
+        <p>No courses found with the search term "{{ searchTerm }}"</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(courses$ | async)?.length || 0 > 0">
+      <app-courses-list
+        [courses]="(courses$ | async) || []"
+        [editable]="(isAdmin$ | async) || false"
+        (showCourse)="onShowCourse($event)"
+        (editCourse)="onEditCourse($event)"
+        (deleteCourse)="onDeleteCourse($event)"
+        trackBy="trackByCourseId"
+      ></app-courses-list>
+    </ng-container>
+  </ng-container>
 </div>

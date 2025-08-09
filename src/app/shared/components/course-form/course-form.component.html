@@ -1,146 +1,167 @@
-<h2>Create / Edit Course</h2>
-<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
-  <div class="app-plate">
-    <div class="course">
-      <h3>Main Info</h3>
+<div *ngIf="isLoading$ | async" class="loading-container">
+  <app-spinner></app-spinner>
+  <p>{{ isEditMode ? "Loading course..." : "Loading..." }}</p>
+</div>
 
-      <!-- Title Input -->
-      <div class="form__control">
-        <label for="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          placeholder="Input text"
-          formControlName="title"
-          [class.is-invalid]="
-            title?.invalid && (title?.dirty || title?.touched)
-          "
-        />
-        <div class="error-container">
-          <span
-            *ngIf="title?.invalid && (title?.dirty || title?.touched) && title?.errors?.['required']"
-            class="text-danger"
-            >Title is required.</span
-          >
-          <span
-            *ngIf="title?.invalid && (title?.dirty || title?.touched) && title?.errors?.['minlength']"
-            class="text-danger"
-            >Title should be at least 2 characters.</span
-          >
-        </div>
-      </div>
+<div *ngIf="!(isLoading$ | async)">
+  <h2>{{ pageTitle }}</h2>
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+    <div class="app-plate">
+      <div class="course">
+        <h3>Main Info</h3>
 
-      <!-- Description Textarea -->
-      <div class="form__control">
-        <label for="description">Description</label>
-        <textarea
-          id="description"
-          formControlName="description"
-          placeholder="Input text"
-          rows="4"
-          cols="5"
-          [class.is-invalid]="
-            description?.invalid && (description?.dirty || description?.touched)
-          "
-        ></textarea>
-        <div class="error-container">
-          <span
-            *ngIf="description?.invalid && (description?.dirty || description?.touched) && description?.errors?.['required']"
-            class="text-danger"
-            >Description is required.</span
-          >
-          <span
-            *ngIf="description?.invalid && (description?.dirty || description?.touched) && description?.errors?.['minlength']"
-            class="text-danger"
-            >Description should be at least 2 characters.</span
-          >
-        </div>
-      </div>
-
-      <div class="separator"></div>
-
-      <h3>Duration</h3>
-
-      <!-- Duration Input -->
-      <div class="form__control">
-        <div class="course__flex__duration">
+        <!-- Title Input -->
+        <div class="form__control">
+          <label for="title">Title</label>
           <input
-            type="number"
-            id="duration"
-            placeholder="Input duration"
-            formControlName="duration"
+            type="text"
+            id="title"
+            placeholder="Input text"
+            formControlName="title"
             [class.is-invalid]="
-              duration?.invalid && (duration?.dirty || duration?.touched)
+              title?.invalid && (title?.dirty || title?.touched)
             "
           />
-          <div class="course__duration">
-            {{ duration?.value || 0 | duration }}
-          </div>
-        </div>
-        <div class="error-container">
-          <span
-            *ngIf="duration?.invalid && (duration?.dirty || duration?.touched) && duration?.errors?.['required']"
-            class="text-danger"
-            >Duration is required.</span
-          >
-          <span
-            *ngIf="duration?.invalid && (duration?.dirty || duration?.touched) && duration?.errors?.['min'] && !duration?.errors?.['required']"
-            class="text-danger"
-            >Duration should not be less than 0.</span
-          >
-        </div>
-      </div>
-
-      <div class="separator"></div>
-
-      <div class="course__authors">
-        <div class="course__available-authors">
-          <h3>Authors</h3>
-
-          <!-- Author Form Component -->
-          <app-author-form
-            (authorCreated)="onAuthorCreated($event)"
-          ></app-author-form>
-
-          <!-- Available Authors List -->
-          <div class="">
-            <h4>Authors List</h4>
-            <div
-              *ngFor="let author of availableAuthorsList"
-              class="author-item"
-            >
-              <span>{{ author.name }}</span>
-              <span class="course__icon" (click)="addAuthorToCourse(author.id)">
-                ➕
-              </span>
-            </div>
-          </div>
-        </div>
-        <!-- Course Authors List -->
-        <div class="course__selected-authors">
-          <h3>Course Authors</h3>
-          <div *ngFor="let author of courseAuthors" class="author-item">
-            <span>{{ author.name }}</span>
+          <div class="error-container">
             <span
-              class="course__icon"
-              (click)="removeAuthorFromCourse(author.id)"
+              *ngIf="title?.invalid && (title?.dirty || title?.touched) && title?.errors?.['required']"
+              class="text-danger"
+              >Title is required.</span
             >
-              🗑️
-            </span>
+            <span
+              *ngIf="title?.invalid && (title?.dirty || title?.touched) && title?.errors?.['minlength']"
+              class="text-danger"
+              >Title should be at least 2 characters.</span
+            >
+          </div>
+        </div>
+
+        <!-- Description Textarea -->
+        <div class="form__control">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            placeholder="Input text"
+            rows="4"
+            cols="5"
+            [class.is-invalid]="
+              description?.invalid &&
+              (description?.dirty || description?.touched)
+            "
+          ></textarea>
+          <div class="error-container">
+            <span
+              *ngIf="description?.invalid && (description?.dirty || description?.touched) && description?.errors?.['required']"
+              class="text-danger"
+              >Description is required.</span
+            >
+            <span
+              *ngIf="description?.invalid && (description?.dirty || description?.touched) && description?.errors?.['minlength']"
+              class="text-danger"
+              >Description should be at least 2 characters.</span
+            >
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <h3>Duration</h3>
+
+        <!-- Duration Input -->
+        <div class="form__control">
+          <div class="course__flex__duration">
+            <input
+              type="number"
+              id="duration"
+              placeholder="Input duration"
+              formControlName="duration"
+              [class.is-invalid]="
+                duration?.invalid && (duration?.dirty || duration?.touched)
+              "
+            />
+            <div class="course__duration">
+              {{ duration?.value || 0 | duration }}
+            </div>
           </div>
           <div class="error-container">
             <span
-              *ngIf="authors?.invalid && (authors?.dirty || authors?.touched)"
+              *ngIf="duration?.invalid && (duration?.dirty || duration?.touched) && duration?.errors?.['required']"
               class="text-danger"
-              >At least one author is required.</span
+              >Duration is required.</span
+            >
+            <span
+              *ngIf="duration?.invalid && (duration?.dirty || duration?.touched) && duration?.errors?.['min'] && !duration?.errors?.['required']"
+              class="text-danger"
+              >Duration should not be less than 0.</span
             >
           </div>
         </div>
-      </div>
-      <!-- Submit Button -->
-      <div class="form__action">
-        <app-button text="Create Course" type="submit"></app-button>
+
+        <div class="separator"></div>
+
+        <div class="course__authors">
+          <div class="course__available-authors">
+            <h3>Authors</h3>
+
+            <!-- Author Form Component -->
+            <app-author-form
+              (authorCreated)="onAuthorCreated($event)"
+            ></app-author-form>
+
+            <!-- Available Authors List -->
+            <div class="">
+              <h4>Authors List</h4>
+              <div
+                *ngFor="let author of availableAuthorsList"
+                class="author-item"
+              >
+                <span>{{ author.name }}</span>
+                <span
+                  class="course__icon"
+                  (click)="addAuthorToCourse(author.id)"
+                >
+                  ➕
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Course Authors List -->
+          <div class="course__selected-authors">
+            <h3>Course Authors</h3>
+            <div *ngFor="let author of courseAuthors" class="author-item">
+              <span>{{ author.name }}</span>
+              <span
+                class="course__icon"
+                (click)="removeAuthorFromCourse(author.id)"
+              >
+                🗑️
+              </span>
+            </div>
+            <div class="error-container">
+              <span
+                *ngIf="authors?.invalid && (authors?.dirty || authors?.touched)"
+                class="text-danger"
+                >At least one author is required.</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Action Buttons -->
+        <div class="form__action">
+          <app-button
+            text="Cancel"
+            type="button"
+            (click)="navigateBack()"
+            [disabled]="(isLoading$ | async) || false"
+          ></app-button>
+          <app-button
+            [text]="submitButtonText"
+            type="submit"
+            [disabled]="(isLoading$ | async) || courseForm.invalid"
+          ></app-button>
+        </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>

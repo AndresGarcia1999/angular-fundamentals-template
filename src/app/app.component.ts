@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
+import { Observable } from "rxjs";
 
-import { Course } from "@app/shared/models";
-
-import { mockedCoursesList } from "./shared/mocks/mock";
+import { AuthService } from "./auth/services/auth.service";
+import { UserStoreService } from "./user/services/user-store.service";
 
 @Component({
   selector: "app-root",
@@ -12,6 +12,25 @@ import { mockedCoursesList } from "./shared/mocks/mock";
 export class AppComponent {
   title = "courses-app";
 
-  coursesList: Course[] = mockedCoursesList;
-  selectedCourse: Course = this.coursesList[0];
+  isAuthenticated: boolean = this.authService.isAuthorized;
+
+  constructor(
+    private authService: AuthService,
+    private userStoreService: UserStoreService
+  ) {}
+
+  get isAuthenticated$(): Observable<boolean> {
+    return this.authService.isAuthorized$;
+  }
+  get userName$(): Observable<string> {
+    return this.userStoreService.name$;
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.isAuthenticated = false;
+      },
+    });
+  }
 }

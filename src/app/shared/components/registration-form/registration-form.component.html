@@ -80,5 +80,14 @@
         [disabled]="registrationForm.invalid"
       ></app-button>
     </div>
+    <div class="error-container">
+      <span id="errorMessage" *ngIf="errorMessage" class="text-danger">{{
+        errorMessage
+      }}</span>
+    </div>
+    <div class="form__text">
+      If you don't have an account you may
+      <strong (click)="onLoginClick()">login</strong>
+    </div>
   </form>
 </div>

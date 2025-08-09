@@ -1,30 +1,129 @@
-import { Injectable } from '@angular/core';
+import { Router } from "@angular/router";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable, tap } from "rxjs";
+
+import { SessionStorageService } from "./session-storage.service";
+import { UserStoreService } from "../../user/services/user-store.service";
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  successful: boolean;
+  result: string; // JWT token
+  user?: {
+    name: string;
+    email: string;
+    role: string;
+  };
+}
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-    login(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private readonly API_URL = "http://localhost:4000";
+  // Private BehaviorSubject for internal state management
+  private isAuthorized$$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
-    logout() {
-        // Add your code here
-    }
+  // Public Observable for components to subscribe to
+  public isAuthorized$: Observable<boolean> =
+    this.isAuthorized$$.asObservable();
 
-    register(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(
+    private http: HttpClient,
+    private sessionStorageService: SessionStorageService,
+    private userStoreService: UserStoreService,
+    private router: Router
+  ) {
+    // Check if user is already logged in on service initialization
+    this.checkAuthStatus();
+  }
 
-    get isAuthorised() {
-        // Add your code here. Get isAuthorized$$ value
-    }
+  /**
+   * Check authentication status on service initialization
+   */
+  private checkAuthStatus(): void {
+    const token = this.sessionStorageService.getToken();
+    this.isAuthorized$$.next(!!token);
+  }
 
-    set isAuthorised(value: boolean) {
-        // Add your code here. Change isAuthorized$$ value
-    }
+  login(credentials: LoginRequest): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/login`, credentials)
+      .pipe(
+        tap({
+          next: (response) => {
+            if (response.successful && response.result) {
+              this.sessionStorageService.setToken(response.result);
+              this.isAuthorized$$.next(true);
 
-    getLoginUrl() {
-        // Add your code here
-    }
+              // Load user data after successful login
+              this.userStoreService.getUser().subscribe();
+            }
+          },
+        })
+      );
+  }
+
+  logout(): Observable<any> {
+    return this.http.delete(`${this.API_URL}/logout`).pipe(
+      tap({
+        next: () => {
+          this.sessionStorageService.deleteToken();
+          this.isAuthorized$$.next(false);
+          // Navigate to login page after logout
+          this.router.navigate(["/login"]);
+          // Clear user data on logout
+          this.userStoreService.clearUser();
+        },
+        error: (error) => {
+          console.error("Logout error:", error);
+          this.sessionStorageService.deleteToken();
+          this.isAuthorized$$.next(false);
+          // Navigate to login page after logout
+          this.router.navigate(["/login"]);
+          // Clear user data on logout
+          this.userStoreService.clearUser();
+        },
+      })
+    );
+  }
+
+  register(userData: RegisterRequest): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/register`, userData)
+      .pipe(
+        tap({
+          next: (response) => {
+            if (response.successful && response.result) {
+              this.sessionStorageService.setToken(response.result);
+              this.isAuthorized$$.next(true);
+            }
+          },
+        })
+      );
+  }
+
+  getToken(): string | null {
+    return this.sessionStorageService.getToken();
+  }
+
+  get isAuthorized() {
+    return this.isAuthorized$$.getValue();
+  }
+
+  set isAuthorized(value: boolean) {
+    this.isAuthorized$$.next(value);
+  }
 }

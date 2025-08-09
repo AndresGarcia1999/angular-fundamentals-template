@@ -13,10 +13,15 @@
           />
         </div>
         <app-button
-          text="Create author"
+          [text]="(isLoadingAuthors$ | async) ? 'Creating...' : 'Create author'"
           type="button"
           (click)="createAuthor()"
-          [disabled]="authorName?.invalid || !authorName?.value"
+          [disabled]="
+            authorName?.invalid ||
+            !authorName?.value ||
+            (isLoadingAuthors$ | async) ||
+            false
+          "
         ></app-button>
       </div>
       <div class="error-container">

@@ -1,49 +1,9 @@
-<!-- With username and buttons -->
 <app-header>
-  <span class="username">John Doe</span>
-  <app-button text="Logout"></app-button>
+  <ng-container *ngIf="isAuthenticated$ | async">
+    <span class="username">{{ userName$ | async }}</span>
+    <app-button text="Logout" (click)="logout()"></app-button>
+  </ng-container>
 </app-header>
 <div class="app-root">
-  <!-- Search component -->
-  <!-- <app-search></app-search> -->
-
-  <!-- <app-info
-    title="Your List Is Empty"
-    text="Please use 'Add New Course' button to add your first course"
-  >
-    <app-button text="Add New Course"></app-button>
-  </app-info> -->
-
-  <!-- Courses List component -->
-  <!-- <app-courses-list
-    [courses]="coursesList"
-    [editable]="true"
-    (showCourse)="onShowCourse($event)"
-    (editCourse)="onEditCourse($event)"
-    (deleteCourse)="onDeleteCourse($event)"
-  >
-  </app-courses-list> -->
-
-  <!-- <app-course-info
-    [id]="selectedCourse.id"
-    [title]="selectedCourse.title"
-    [description]="selectedCourse.description"
-    [creationDate]="selectedCourse.creationDate"
-    [duration]="selectedCourse.duration"
-    [authors]="selectedCourse.authors"
-  ></app-course-info> -->
-
-  <app-courses [courses]="coursesList"></app-courses>
-
-  <!-- Login Form component -->
-  <!-- <app-login-form></app-login-form> -->
-
-  <!-- Login Form component -->
-  <!-- <app-registration-form></app-registration-form> -->
-
-  <!-- Login Form component -->
-  <!-- <app-course-form></app-course-form> -->
-
-  <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
+  <router-outlet></router-outlet>
 </div>

@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 import { ModalComponent } from "./components/modal/modal.component";
 import {
@@ -10,24 +10,22 @@ import {
   InfoComponent,
   SearchComponent,
   CourseCardComponent,
-  LoginFormComponent,
   AuthorFormComponent,
   CourseComponent,
-  RegistrationFormComponent,
+  SpinnerComponent,
 } from "./components";
 
 import { DurationPipe, CustomDatePipe, AuthorNamesPipe } from "./pipes";
 import { EmailValidatorDirective } from "@shared/directives/email.directive";
 
 const components = [
+  SpinnerComponent,
   HeaderComponent,
   ButtonComponent,
   InfoComponent,
   SearchComponent,
   ModalComponent,
   CourseCardComponent,
-  LoginFormComponent,
-  RegistrationFormComponent,
   CourseComponent,
   AuthorFormComponent,
   DurationPipe,
