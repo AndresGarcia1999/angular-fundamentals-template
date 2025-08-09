@@ -115,10 +115,6 @@ export class AuthService {
       );
   }
 
-  getToken(): string | null {
-    return this.sessionStorageService.getToken();
-  }
-
   get isAuthorized() {
     return this.isAuthorized$$.getValue();
   }

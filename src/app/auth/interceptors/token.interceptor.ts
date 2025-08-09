@@ -9,21 +9,24 @@ import {
 import { Router } from "@angular/router";
 import { Observable, throwError, catchError } from "rxjs";
 
-import { AuthService } from "@app/auth/services/auth.service";
+import { SessionStorageService } from "@app/auth/services/session-storage.service";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   // Define auth endpoints that should NOT trigger automatic logout on 401
   private authEndpoints = ["/login", "/register", "/logout"];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private sessionStorageService: SessionStorageService,
+    private router: Router
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Get the token from the auth service
-    const token = this.authService.getToken();
+    // Get token directly from session storage
+    const token = this.sessionStorageService.getToken();
 
     // Clone the request and add the Authorization header if token exists
     let authReq = req;
@@ -37,18 +40,9 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !this.isAuthEndpoint(req.url)) {
-          // Token is invalid or expired
-          this.authService.logout().subscribe({
-            next: () => {
-              // Redirect to login page after logout
-              this.router.navigate(["/login"]);
-            },
-            error: () => {
-              // Even if logout fails, clear local state and redirect
-              this.authService.isAuthorized = false;
-              this.router.navigate(["/login"]);
-            },
-          });
+          // Clear token and redirect
+          this.sessionStorageService.deleteToken();
+          this.router.navigate(["/login"]);
         }
         return throwError(() => error);
       })
