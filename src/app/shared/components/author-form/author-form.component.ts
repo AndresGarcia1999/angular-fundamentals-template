@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Component, EventEmitter, Output, OnDestroy } from "@angular/core";
 
 import { Author } from "@app/shared/models";
-import { CoursesStoreService } from "../../../services/courses-store.service";
+import { CoursesStoreService } from "@app/services/courses-store.service";
 
 @Component({
   selector: "app-author-form",

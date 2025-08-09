@@ -9,8 +9,8 @@ import {
 } from "rxjs";
 
 import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "../../services/courses-store.service";
-import { UserStoreService } from "../../user/services/user-store.service";
+import { CoursesStoreService } from "@app/services/courses-store.service";
+import { UserStoreService } from "@app/user/services/user-store.service";
 
 @Component({
   selector: "app-courses",

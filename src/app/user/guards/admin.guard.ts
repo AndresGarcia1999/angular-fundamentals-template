@@ -8,7 +8,7 @@ import {
   Router,
 } from "@angular/router";
 
-import { UserStoreService } from "../services/user-store.service";
+import { UserStoreService } from "@app/user/services/user-store.service";
 
 @Injectable({
   providedIn: "root",

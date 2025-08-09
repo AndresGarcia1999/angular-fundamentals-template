@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, finalize, tap, map } from "rxjs";
 
-import { UserService, User } from "./user.service";
+import { UserService, User } from "@app/user/services/user.service";
 
 @Injectable({
   providedIn: "root",

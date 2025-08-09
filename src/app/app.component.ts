@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { AuthService } from "./auth/services/auth.service";
-import { UserStoreService } from "./user/services/user-store.service";
+import { AuthService } from "@app/auth/services/auth.service";
+import { UserStoreService } from "@app/user/services/user-store.service";
 
 @Component({
   selector: "app-root",

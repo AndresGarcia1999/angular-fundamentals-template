@@ -1,7 +1,7 @@
 import { Observable, of, map } from "rxjs";
 import { Pipe, PipeTransform } from "@angular/core";
 
-import { CoursesStoreService } from "../../services/courses-store.service";
+import { CoursesStoreService } from "@app/services/courses-store.service";
 
 @Pipe({
   name: "authorNames",

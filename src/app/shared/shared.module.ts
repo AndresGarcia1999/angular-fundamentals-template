@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
-import { ModalComponent } from "./components/modal/modal.component";
+import { ModalComponent } from "@shared/components/modal/modal.component";
 import {
   HeaderComponent,
   ButtonComponent,
@@ -13,9 +13,9 @@ import {
   AuthorFormComponent,
   CourseComponent,
   SpinnerComponent,
-} from "./components";
+} from "@shared/components";
 
-import { DurationPipe, CustomDatePipe, AuthorNamesPipe } from "./pipes";
+import { DurationPipe, CustomDatePipe, AuthorNamesPipe } from "@shared/pipes";
 import { EmailValidatorDirective } from "@shared/directives/email.directive";
 
 const components = [

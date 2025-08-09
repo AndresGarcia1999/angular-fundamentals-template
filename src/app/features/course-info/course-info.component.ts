@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "../../services/courses-store.service";
+import { CoursesStoreService } from "@app/services/courses-store.service";
 
 @Component({
   selector: "app-course-info",

@@ -2,8 +2,8 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 
-import { AuthService } from "./services/auth.service";
-import { SessionStorageService } from "./services/session-storage.service";
+import { AuthService } from "@app/auth/services/auth.service";
+import { SessionStorageService } from "@app/auth/services/session-storage.service";
 
 @NgModule({
   declarations: [],

@@ -1,12 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { CoursesComponent } from "./courses.component";
-import { CourseInfoComponent } from "../course-info/course-info.component";
-import { CourseComponent } from "../../shared/components/course-form/course-form.component";
+import { CoursesComponent } from "@features/courses/courses.component";
+import { CourseInfoComponent } from "@features/course-info/course-info.component";
+import { CourseComponent } from "@shared/components/course-form/course-form.component";
 
-import { AdminGuard } from "../../user/guards/admin.guard";
-import { AuthorizedGuard } from "../../auth/guards/authorized.guard";
+import { AdminGuard } from "@app/user/guards/admin.guard";
+import { AuthorizedGuard } from "@app/auth/guards/authorized.guard";
 
 const routes: Routes = [
   {

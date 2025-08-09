@@ -5,7 +5,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { SharedModule } from "@shared/shared.module";
-import { AppRoutingModule } from "./app-routing.module";
+import { AppRoutingModule } from "@app/app-routing.module";
 
 import { CoursesService } from "@app/services/courses.service";
 import { AuthService } from "@app/auth/services/auth.service";
@@ -17,8 +17,8 @@ import { SessionStorageService } from "@app/auth/services/session-storage.servic
 import { TokenInterceptor } from "@app/auth/interceptors/token.interceptor";
 
 import { AppComponent } from "@app/app.component";
-import { LoginFormComponent } from "./shared/components/login-form/login-form.component";
-import { RegistrationFormComponent } from "./shared/components/registration-form/registration-form.component";
+import { LoginFormComponent } from "@shared/components/login-form/login-form.component";
+import { RegistrationFormComponent } from "@shared/components/registration-form/registration-form.component";
 
 @NgModule({
   declarations: [AppComponent, LoginFormComponent, RegistrationFormComponent],

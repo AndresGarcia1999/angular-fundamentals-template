@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
-import { SessionStorageService } from "./session-storage.service";
-import { UserStoreService } from "../../user/services/user-store.service";
+import { SessionStorageService } from "@app/auth/services/session-storage.service";
+import { UserStoreService } from "@app/user/services/user-store.service";
 
 export interface LoginRequest {
   email: string;

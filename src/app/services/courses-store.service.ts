@@ -6,7 +6,7 @@ import {
   CoursesService,
   EditCourseRequest,
   CreateCourseRequest,
-} from "./courses.service";
+} from "@app/services/courses.service";
 
 @Injectable({
   providedIn: "root",
