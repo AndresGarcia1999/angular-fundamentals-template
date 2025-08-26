@@ -5,7 +5,8 @@ import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 
 import { Author } from "@app/shared/models/author.model";
 import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesService } from "@app/services/courses.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-course-form",
@@ -19,14 +20,15 @@ export class CourseComponent implements OnInit, OnDestroy {
   availableAuthors: Author[] = [];
   isEditMode = false;
   courseId: string | null = null;
-  isLoading$ = this.coursesStoreService.isLoading$;
-  isLoadingAuthors$ = this.coursesStoreService.isLoadingAuthors$;
+  isLoading$ = this.coursesFacade.isAllCoursesLoading$;
+  course$ = this.coursesFacade.course$;
 
   constructor(
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private coursesStoreService: CoursesStoreService
+    private coursesFacade: CoursesStateFacade,
+    private coursesService: CoursesService
   ) {}
 
   ngOnInit() {
@@ -58,14 +60,21 @@ export class CourseComponent implements OnInit, OnDestroy {
     if (this.isEditMode && this.courseId) {
       // Load both authors and course data for edit mode
       forkJoin({
-        authors: this.coursesStoreService.getAllAuthors(),
-        course: this.coursesStoreService.getCourse(this.courseId),
+        authors: this.coursesService.getAllAuthors(),
       })
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: ({ authors, course }) => {
-            this.availableAuthors = authors;
-            this.populateForm(course);
+          next: ({ authors }) => {
+            this.availableAuthors = authors.result;
+            // Load the course after getting authors
+            this.coursesFacade.getSingleCourse(this.courseId!);
+
+            // Subscribe to course data and populate form when available
+            this.course$.pipe(takeUntil(this.destroy$)).subscribe((course) => {
+              if (course) {
+                this.populateForm(course);
+              }
+            });
           },
           error: (error) => {
             console.error("Error loading data:", error);
@@ -74,12 +83,12 @@ export class CourseComponent implements OnInit, OnDestroy {
         });
     } else {
       // Load only authors for add mode
-      this.coursesStoreService
+      this.coursesService
         .getAllAuthors()
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (authors) => {
-            this.availableAuthors = authors;
+            this.availableAuthors = authors.result;
           },
           error: (error) => {
             console.error("Error loading authors:", error);
@@ -179,18 +188,8 @@ export class CourseComponent implements OnInit, OnDestroy {
       authors: formData.authors,
     };
 
-    this.coursesStoreService
-      .createCourse(createRequest)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (course) => {
-          console.log("Course created successfully:", course);
-          this.navigateBack();
-        },
-        error: (error) => {
-          console.error("Error creating course:", error);
-        },
-      });
+    this.coursesFacade.createCourse(createRequest);
+    this.navigateBack();
   }
 
   private updateCourse(formData: any): void {
@@ -203,18 +202,8 @@ export class CourseComponent implements OnInit, OnDestroy {
       authors: formData.authors,
     };
 
-    this.coursesStoreService
-      .editCourse(this.courseId, editRequest)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (course) => {
-          console.log("Course updated successfully:", course);
-          this.navigateBack();
-        },
-        error: (error) => {
-          console.error("Error updating course:", error);
-        },
-      });
+    this.coursesFacade.editCourse(editRequest, this.courseId);
+    this.navigateBack();
   }
 
   navigateBack(): void {

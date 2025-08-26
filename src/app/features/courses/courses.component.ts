@@ -2,15 +2,15 @@ import { Router } from "@angular/router";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   Subject,
-  switchMap,
   takeUntil,
   BehaviorSubject,
   distinctUntilChanged,
 } from "rxjs";
 
 import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 import { UserStoreService } from "@app/user/services/user-store.service";
+import { CoursesStoreService } from "@app/services/courses-store.service";
 
 @Component({
   selector: "app-courses",
@@ -21,12 +21,13 @@ export class CoursesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchSubject$ = new BehaviorSubject<string>("");
 
-  courses$ = this.coursesStoreService.courses$;
-  isLoading$ = this.coursesStoreService.isLoading$;
+  courses$ = this.coursesFacade.courses$;
+  isLoading$ = this.coursesFacade.isAllCoursesLoading$;
   authors$ = this.coursesStoreService.authors$;
   isAdmin$ = this.userStoreService.isAdmin$;
 
   constructor(
+    private coursesFacade: CoursesStateFacade,
     private coursesStoreService: CoursesStoreService,
     private userStoreService: UserStoreService,
     private router: Router
@@ -35,7 +36,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadUserData();
     this.loadAllCourses(); // Load all courses initially
-    this.loadAuthors(); // Load authors for pipe
+    this.loadAuthors(); // Load authors for author names
     this.setupSearch();
   }
 
@@ -43,18 +44,14 @@ export class CoursesComponent implements OnInit, OnDestroy {
     this.searchSubject$
       .pipe(
         distinctUntilChanged(), // Only emit if the search term actually changed
-        switchMap((term) =>
-          this.coursesStoreService.filterCourses(term.trim())
-        ),
         takeUntil(this.destroy$)
       )
-      .subscribe({
-        next: (courses) => {
-          console.log("Search results:", courses);
-        },
-        error: (error) => {
-          console.error("Error searching courses:", error);
-        },
+      .subscribe((term) => {
+        if (term.trim()) {
+          this.coursesFacade.getFilteredCourses(term.trim());
+        } else {
+          this.coursesFacade.getAllCourses();
+        }
       });
   }
 
@@ -64,17 +61,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   private loadAllCourses(): void {
-    this.coursesStoreService
-      .getAll()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (courses) => {
-          console.log("Courses loaded successfully", courses);
-        },
-        error: (error) => {
-          console.error("Error loading courses:", error);
-        },
-      });
+    this.coursesFacade.getAllCourses();
   }
 
   private loadAuthors(): void {
@@ -118,17 +105,8 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   onDeleteCourse(course: Course): void {
-    this.coursesStoreService
-      .deleteCourse(course.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          console.log("Course deleted successfully:", course.title);
-        },
-        error: (error) => {
-          console.error("Error deleting course:", error);
-        },
-      });
+    this.coursesFacade.deleteCourse(course.id);
+    console.log("Course deletion requested:", course.title);
   }
 
   onShowCourse(course: Course): void {

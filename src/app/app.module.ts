@@ -1,9 +1,12 @@
 import { NgModule } from "@angular/core";
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
 import { BrowserModule } from "@angular/platform-browser";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
+import { reducers, effects } from "@app/store";
 import { SharedModule } from "@shared/shared.module";
 import { AppRoutingModule } from "@app/app-routing.module";
 
@@ -30,6 +33,8 @@ import { RegistrationFormComponent } from "@shared/components/registration-form/
     AppRoutingModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
   ],
   providers: [
     // HTTP Interceptor for token management

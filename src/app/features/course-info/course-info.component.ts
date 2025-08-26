@@ -1,9 +1,8 @@
-import { Subject, takeUntil, Observable } from "rxjs";
+import { Subject } from "rxjs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
-import { Course } from "@app/shared/models/course.model";
-import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-course-info",
@@ -13,13 +12,13 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
 export class CourseInfoComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  course$!: Observable<Course>;
-  isLoading$ = this.coursesStoreService.isLoading$;
+  course$ = this.coursesFacade.course$;
+  isLoading$ = this.coursesFacade.isSingleCourseLoading$;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private coursesStoreService: CoursesStoreService
+    private coursesFacade: CoursesStateFacade
   ) {}
 
   ngOnInit(): void {
@@ -39,19 +38,7 @@ export class CourseInfoComponent implements OnInit, OnDestroy {
   }
 
   private loadCourse(id: string): void {
-    this.course$ = this.coursesStoreService
-      .getCourse(id)
-      .pipe(takeUntil(this.destroy$));
-
-    this.course$.subscribe({
-      next: (course) => {
-        console.log("Course loaded:", course);
-      },
-      error: (error) => {
-        console.error("Error loading course:", error);
-        this.onBack(); // Navigate back if course not found
-      },
-    });
+    this.coursesFacade.getSingleCourse(id);
   }
 
   onBack(): void {
